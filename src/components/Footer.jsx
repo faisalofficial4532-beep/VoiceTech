@@ -188,19 +188,19 @@ export default function Footer() {
 
           {/* LEGAL */}
           <div className="flex gap-7 text-[14px] text-[#9aadd0]">
-            <a
-              href="/privacy-policy"
-              className="cursor-pointer transition hover:text-white"
-            >
-              Privacy Policy
-            </a>
+           <a
+               href="/privacy-policy"
+                  className="cursor-pointer transition hover:text-white"
+                 >
+                      Privacy Policy
+                        </a>
 
-            <a
-              href="/terms-of-service"
-              className="cursor-pointer transition hover:text-white"
-            >
-              Terms of Service
-            </a>
+           <a
+  href="/terms-of-service"
+  className="cursor-pointer transition hover:text-white"
+>
+  Terms of Service
+</a>
           </div>
 
         </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   Sparkles,
@@ -15,6 +16,8 @@ import {
 } from "lucide-react";
 
 function Navbar() {
+  const navigate = useNavigate();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState("signin");
@@ -56,41 +59,45 @@ function Navbar() {
   }, []);
 
   /* =====================================================
-     NAVIGATION / SMOOTH SCROLL
+     SCROLL TO SECTION
+  ===================================================== */
+  const scrollToSection = (target) => {
+    const element = document.getElementById(target);
+
+    if (!element) return;
+
+    const navbarHeight = 60;
+
+    const elementPosition =
+      element.getBoundingClientRect().top + window.scrollY;
+
+    window.scrollTo({
+      top: elementPosition - navbarHeight,
+      behavior: "smooth",
+    });
+  };
+
+  /* =====================================================
+     NAVIGATION / SECTION LINKS
   ===================================================== */
   const handleScroll = (e, target) => {
     e.preventDefault();
 
     setIsMenuOpen(false);
 
-    /*
-      If we are already on the Home page,
-      smoothly scroll to the section.
-    */
+    // Already on Home
     if (window.location.pathname === "/") {
-      const element = document.getElementById(target);
-
-      if (!element) return;
-
-      const navbarHeight = 60;
-
-      const elementPosition =
-        element.getBoundingClientRect().top + window.scrollY;
-
-      window.scrollTo({
-        top: elementPosition - navbarHeight,
-        behavior: "smooth",
-      });
-
+      scrollToSection(target);
       return;
     }
 
-    /*
-      If we are on Privacy Policy,
-      Terms of Service, or another page,
-      go back to Home and target the section.
-    */
-    window.location.href = `/#${target}`;
+    // Other pages → Home
+    navigate("/");
+
+    // Wait for Home to render, then scroll
+    setTimeout(() => {
+      scrollToSection(target);
+    }, 100);
   };
 
   /* =====================================================
@@ -101,21 +108,18 @@ function Navbar() {
 
     setIsMenuOpen(false);
 
-    /*
-      Always take the user to the landing page.
-    */
-    if (window.location.pathname !== "/") {
-      window.location.href = "/";
+    // If already Home
+    if (window.location.pathname === "/") {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+
       return;
     }
 
-    /*
-      If already on Home, smoothly go to top.
-    */
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    // Privacy / Terms / other pages → Home
+    navigate("/");
   };
 
   /* =====================================================
@@ -135,6 +139,24 @@ function Navbar() {
     setAuthMode("signup");
     setShowPassword(false);
     setAgreeTerms(false);
+  };
+
+  /* =====================================================
+     TERMS PAGE
+  ===================================================== */
+  const openTerms = () => {
+    setIsAuthOpen(false);
+    setIsMenuOpen(false);
+    navigate("/terms-of-service");
+  };
+
+  /* =====================================================
+     PRIVACY PAGE
+  ===================================================== */
+  const openPrivacy = () => {
+    setIsAuthOpen(false);
+    setIsMenuOpen(false);
+    navigate("/privacy-policy");
   };
 
   /* =====================================================
@@ -204,6 +226,7 @@ function Navbar() {
               DESKTOP NAVIGATION
           ================================================= */}
           <div className="hidden items-center gap-1 rounded-full border border-gray-200 bg-white px-2 py-1.5 shadow-sm lg:flex">
+
             {menuItems.map((item) => {
               const Icon = item.icon;
 
@@ -313,7 +336,6 @@ function Navbar() {
         {/* MOBILE HEADER */}
         <div className="flex h-[60px] shrink-0 items-center justify-between border-b border-gray-100 px-5">
 
-          {/* MOBILE LOGO */}
           <a
             href="/"
             onClick={handleLogoClick}
@@ -330,7 +352,6 @@ function Navbar() {
             </span>
           </a>
 
-          {/* CLOSE */}
           <button
             type="button"
             onClick={() => setIsMenuOpen(false)}
@@ -348,6 +369,7 @@ function Navbar() {
 
         {/* MOBILE LINKS */}
         <div className="flex-1 overflow-y-auto px-4 py-4">
+
           <div className="flex flex-col gap-1">
 
             {menuItems.map((item) => {
@@ -379,6 +401,7 @@ function Navbar() {
 
             {/* MOBILE SIGN IN */}
             <div className="mt-3 border-t border-gray-100 px-1 pt-3">
+
               <button
                 type="button"
                 onClick={openSignIn}
@@ -398,6 +421,7 @@ function Navbar() {
 
                 <span>Sign Up / Sign In</span>
               </button>
+
             </div>
           </div>
         </div>
@@ -418,6 +442,7 @@ function Navbar() {
           "
           onClick={() => setIsAuthOpen(false)}
         >
+
           {/* POPUP CARD */}
           <div
             onClick={(e) => e.stopPropagation()}
@@ -432,6 +457,7 @@ function Navbar() {
               shadow-2xl
             "
           >
+
             {/* CLOSE */}
             <button
               type="button"
@@ -547,11 +573,13 @@ function Navbar() {
               {/* PASSWORD */}
               {isSignUp && (
                 <div className="mt-4">
+
                   <label className="mb-1.5 block text-[13px] font-medium text-gray-800">
                     Password
                   </label>
 
                   <div className="relative">
+
                     <input
                       type={
                         showPassword
@@ -596,6 +624,7 @@ function Navbar() {
                         <Eye size={16} />
                       )}
                     </button>
+
                   </div>
                 </div>
               )}
@@ -603,6 +632,7 @@ function Navbar() {
               {/* TERMS */}
               {isSignUp && (
                 <label className="mt-4 flex cursor-pointer items-start gap-2">
+
                   <input
                     type="checkbox"
                     checked={agreeTerms}
@@ -620,14 +650,26 @@ function Navbar() {
 
                   <span className="text-[12px] leading-5 text-gray-600">
                     I agree to the{" "}
-                    <span className="cursor-pointer underline">
+
+                    <button
+                      type="button"
+                      onClick={openTerms}
+                      className="cursor-pointer underline hover:text-blue-600"
+                    >
                       Terms of Service
-                    </span>{" "}
-                    and{" "}
-                    <span className="cursor-pointer underline">
+                    </button>
+
+                    {" "}and{" "}
+
+                    <button
+                      type="button"
+                      onClick={openPrivacy}
+                      className="cursor-pointer underline hover:text-blue-600"
+                    >
                       Privacy Policy
-                    </span>
+                    </button>
                   </span>
+
                 </label>
               )}
 
@@ -676,10 +718,12 @@ function Navbar() {
                   Use passkey instead
                 </button>
               )}
+
             </div>
 
             {/* POPUP FOOTER */}
             <div className="border-t border-gray-200 bg-gray-50 px-6 py-3.5 text-center">
+
               {isSignUp ? (
                 <p className="text-[13px] text-gray-500">
                   Already have an account?{" "}
@@ -720,7 +764,9 @@ function Navbar() {
                   </button>
                 </p>
               )}
+
             </div>
+
           </div>
         </div>
       )}

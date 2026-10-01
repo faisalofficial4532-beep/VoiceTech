@@ -19,15 +19,30 @@ function AppContent() {
 
   return (
     <div className="min-h-screen scroll-smooth">
-      <Navbar />
+       <Router>
+      <div className="min-h-screen scroll-smooth">
+        <Navbar />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/terms-of-service" element={<TermsOfService />} />
-      </Routes>
+        <Routes>
+          {/* HOME */}
+          <Route path="/" element={<Home />} />
 
-      <Footer />
+          {/* PRIVACY POLICY */}
+          <Route
+            path="/privacy-policy"
+            element={<PrivacyPolicy />}
+          />
+
+          {/* TERMS OF SERVICE */}
+          <Route
+            path="/terms-of-service"
+            element={<TermsOfService />}
+          />
+        </Routes>
+
+        <Footer />
+      </div>
+    </Router>
 
       {/* AUTO POPUP — ONLY HOME PAGE */}
       {isHomePage && <AutoPopup />}
