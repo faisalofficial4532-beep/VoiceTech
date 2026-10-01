@@ -150,7 +150,7 @@ export default function Hero() {
           className="
             mt-5
             w-full
-            max-w-[930px]
+            max-w-[700px]
             text-center
             text-[17px]
             font-normal
@@ -161,9 +161,7 @@ export default function Hero() {
             md:text-[20px]
           "
         >
-          Try a short in-app preview first. With Pro, the first section can
-          start while the full MP3 finishes in the background, and the same PDF
-          powers questions, quizzes, and resumable playback.
+          Try a quick in-app preview while the full MP3 loads in the background, with the PDF powering questions, quizzes, and resumable playback.
         </p>
 
         {/* Options */}

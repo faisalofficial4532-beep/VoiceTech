@@ -9,7 +9,8 @@ import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import AutoPopup from "./components/AutoPopup";
-
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 function AppContent() {
   const location = useLocation();
 
@@ -22,6 +23,8 @@ function AppContent() {
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-of-service" element={<TermsOfService />} />
       </Routes>
 
       <Footer />
